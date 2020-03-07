@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rock-Paper-Scissors</title>
+        <!-- <link rel="stylesheet" href="rock-paper-scissors-v1.2.css"> -->
+        <style>
+            body{
+                font-size: 16px;
+                font-family: Arial, Helvetica, sans-serif;
+                width: 100%;
+                margin: 0 auto;
+                background-color: antiquewhite;
+            }
+
+            header{
+                text-align: center;
+                height: 20%;
+                width: 100%; 
+                background-color: red;
+            }
+
+            .container{
+                text-align: center;
+            }
+
+            .topContainer, .playBoxes, .resultPane{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .yourPane, .compPane{
+                display: flex;
+                flex-direction: column;
+                align-content: space-between;
+                justify-content: space-between;
+
+                border: 2px solid black;
+                width: 10%;
+                height: 200px;
+                border-radius: 20px;
+            }
+            .resultBoard{
+                display: flex;
+                flex-direction: column;
+                align-content: space-around;
+                justify-content: space-around;
+            
+                width: 30%;
+                height: 250px;
+                border: 2px solid black;
+                border-radius: 20px;
+                align-content: space-around;
+            }
+
+            .yourScorePane, .compScorePane, .yourWin, .bothDraw, .compWin {
+                width: 90%;
+                height: 100px;
+                margin: 0 auto;
+            }
+            .yourWin, .bothDraw, .compWin {
+                width: 30%;
+                height: 100px;
+                margin: 0 20p;
+            }
+
+            .score, .ok, .scoreText1, .scoreText2, .yourSelect, span, .compSelect{
+                font-weight: bolder;
+            }
+
+            .score{
+                font-size: 50px;
+                margin-top: 0px;
+            }
+
+            .compSelect, .yourSelect {
+                font-size: 1.5rem;
+            }
+
+            .you, .comp {
+                color: white;
+                background-color: black;
+                height: 30px;
+                width: 100%;
+                border-top-left-radius: 19px;
+                border-top-right-radius: 19px;
+            
+                font-size: 25px;
+                font-weight: bolder; 
+                vertical-align: middle;
+                line-height: 1px;
+                padding-bottom: 10px;
+            }
+
+
+
+            button{
+                height: 40px;
+                width: 90px;
+                border-radius: 3px;
+            }
+
+            .playBoxDiv{
+                width: 50%;
+                height: 200px;
+                border: 2px solid black;
+                margin-left: 25%;
+                margin-top: 30px;
+                border-radius: 10px;
+            }
+
+            .box{
+                width: 15%;
+                height: 150px;
+                margin-left: 1.5%;
+                border: 2px solid black;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 30px;
+                font-weight: bolder;
+
+                vertical-align: middle;
+                line-height: 150px;
+                color: rgb(100, 98, 98);
+                background-color: rgb(247, 245, 245);
+            }
+
+            .box:hover {
+                box-shadow: 2px 1px rgba(0, 0, 0, 0.2), -2px -1px rgba(0, 0, 0, 0.2) ;
+                background-color: rgb(31, 30, 30);
+                color: rgb(255, 255, 255);
+            }
+        </style>
+    </head>
+    <header> <h1>ROCK-PAPER-SCISSORS</h1></header>
+    <body>
+        <div class="container">
+            <!--TopContainer to hold all the result display-->
+            <div class="topContainer">
+                <!--yourPane to display your selection and score-->
+                <div class="yourPane">
+                    <div class="you"><p>You</p></div>
+                    <div class="yourScorePane">
+                        <p>Won</p>
+                        <p class="yourScore score">0</p>
+                    </div>
+                    <div><p class="yourSelect"></p></div>
+                </div>
+                <!--resultBoard to display every result-->
+                <div class="resultBoard">
+                    <div class="resultPane">
+                        <div class="yourWin">
+                             <p class="ok">Won</p>
+                             <p class="yourScore score">0</p>
+                        </div>
+                        <div class="bothDraw">
+                             <p class="ok">Draw</p>
+                             <p class="bothDrawScore score">0</p>
+                        </div>
+                        <div class="compWin">
+                             <p class="ok">Won</p>
+                             <p class="compScore score">0</p>
+                        </div>
+                    </div>
+                    <div class="resultText">
+                        <p class="scoreText1"></p>
+                        <p class="scoreText2">Lets Play</p>
+                    </div>
+                </div>
+                <!--compPane to display comp selection and score-->
+                <div class="compPane">
+                    <div class="comp"><p>Comp</p></div>
+                    <div class="compScorePane">
+                        <p>Won</p>
+                        <p class="compScore score">0</p>
+                    </div>
+                    <div><p class="compSelect"></p></div>
+                </div>
+            </div> 
+            <div class="downContainer">
+                 <p class="totalPlayed">Total Played:<span class="tPlayed">0</span> | Total Remaining:<span class="tRemaining">5</span></p>
+                 <p class="instruction">Select Any Of The Box Below To Play!</p>
+                 <!-- <button>Reset</button> -->
+                 <div class="playBoxes">
+                     <div id="rock" class="box">Rock</div>
+                     <div id="paper" class="box">Paper</div>
+                     <div id="scissors" class="box">Scissors</div>
+                 </div>
+            </div>
+        </div>
+        <!-- <script src="rock-paper-scissors-v1.2.js"></script> -->
+        <script>
+            
+            function getComputerPlay() {
+                let selectAny = ["paper", "rock", "scissors"];
+                let randomReturn = Math.floor(Math.random() * selectAny.length);
+                return selectAny[randomReturn];
+            }
+            
+            String.prototype.firstLetterCap = function() {
+                return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase(); 
+            }
+            
+            Element.prototype.hide = function() {
+                this.style.display = 'none';
+            }
+            Element.prototype.show = function() {
+                this.style.display = '';
+            }
+            
+            let yourWinCount = 0;
+            let compWinCount = 0;
+            let tieCount = 0;
+            let totalPlay = 0;
+            let totalRemaining = 5;
+            
+            function selectChoice(e) {
+                let choice = document.querySelector(`div[id="${e.target.id}"]`);
+                if (!choice) return;
+                
+                // console.log(choice.id);
+                compare(choice.id);
+                
+            }
+            
+            function compare(choice) {
+                let computerSelect = getComputerPlay();
+                let compChoice = document.querySelector(".compSelect");
+                let userChoice = document.querySelector(".yourSelect");
+                compChoice.textContent = `${computerSelect.firstLetterCap()}`;
+                userChoice.textContent = `${choice.firstLetterCap()}`;
+            
+                if (choice === computerSelect) {
+                    tieCount += 1;
+                    totalPlay += 1;
+                    totalRemaining -= 1;
+                    return tie(choice, computerSelect)
+                }
+                      
+                if (choice === "paper") {
+                    if (computerSelect === "rock") {
+                        yourWinCount += 1;
+                        totalPlay += 1;
+                        totalRemaining -= 1;
+                        return yourWin(choice, computerSelect);
+                    }
+                    else {
+                        compWinCount += 1;
+                        totalPlay += 1;
+                        totalRemaining -= 1;
+                        return compWin(choice, computerSelect);
+                    }
+                }
+                if (choice === "rock") {
+                    if (computerSelect === "scissors") {
+                        yourWinCount += 1;
+                        totalPlay += 1;
+                        totalRemaining -= 1;
+                        return yourWin(choice, computerSelect);
+                    }
+                    else {
+                        compWinCount += 1;
+                        totalPlay += 1;
+                        totalRemaining -= 1;
+                        return compWin(choice, computerSelect);
+                    }
+                }
+                if (choice === "scissors") {
+                    if (computerSelect === "rock") {
+                        compWinCount += 1;
+                        totalPlay += 1;
+                        totalRemaining -= 1;
+                        return compWin(choice, computerSelect);
+                    } else {
+                        yourWinCount += 1;
+                        totalPlay += 1;
+                        totalRemaining -= 1;
+                        return yourWin(choice, computerSelect);
+                    }
+                }
+            }
+            
+            function yourWin(choice, computerSelect) {
+                let yourScores = document.querySelectorAll(".yourScore")
+                let tPlayed = document.querySelector(".tPlayed");
+                let tRemaining = document.querySelector(".tRemaining");
+                let scoreText1 = document.querySelector(".scoreText1");
+                let scoreText2 = document.querySelector(".scoreText2");
+                if (totalPlay === 5) {
+                    yourScores.forEach(yourScore => yourScore.textContent = `${yourWinCount}`);
+                    finalResult();
+                } else {
+                    yourScores.forEach(yourScore => yourScore.textContent = `${yourWinCount}`);
+                    tPlayed.textContent = `${totalPlay}`;
+                    tRemaining.textContent = `${totalRemaining}`;
+                    scoreText1.textContent = "Hey! You Win...";
+                    scoreText2.textContent = `${choice.firstLetterCap()} beat ${computerSelect.firstLetterCap()}`;
+                }
+            }
+            
+            function compWin(choice, computerSelect) {
+                let compScores = document.querySelectorAll(".compScore");
+                let tPlayed = document.querySelector(".tPlayed");
+                let tRemaining = document.querySelector(".tRemaining");
+                let scoreText1 = document.querySelector(".scoreText1");
+                let scoreText2 = document.querySelector(".scoreText2");
+            
+                if (totalPlay === 5) {
+                    compScores.forEach(compScore => compScore.textContent = `${compWinCount}`);
+                    finalResult();
+                }else {
+                    compScores.forEach(compScore => compScore.textContent = `${compWinCount}`);
+                    tPlayed.textContent = `${totalPlay}`;
+                    tRemaining.textContent = `${totalRemaining}`;
+                    scoreText1.textContent = "Hey! You Lost...";
+                    scoreText2.textContent = `${computerSelect.firstLetterCap()} beat ${choice.firstLetterCap()}`;
+                }
+            }
+            
+            function tie(choice, computerSelect) {
+                let tieScore = document.querySelector(".bothDrawScore");
+                let tPlayed = document.querySelector(".tPlayed");
+                let tRemaining = document.querySelector(".tRemaining");
+                let scoreText1 = document.querySelector(".scoreText1");
+                let scoreText2 = document.querySelector(".scoreText2");
+                if (totalPlay === 5) {
+                    tieScore.textContent = `${tieCount}`;
+                    finalResult();
+                } else { 
+                    tieScore.textContent = `${tieCount}`;
+                    tPlayed.textContent = `${totalPlay}`;
+                    tRemaining.textContent = `${totalRemaining}`;
+                    scoreText1.textContent = "Hey! It's A  Tie... No Winner!";
+                    scoreText2.textContent = `You and Comp Selected ${choice.firstLetterCap()}.`;
+                }
+            }
+            
+            function finalResult() {
+                let tPlayed = document.querySelector(".tPlayed");
+                let tRemaining = document.querySelector(".tRemaining");
+                let instruction = document.querySelector(".instruction");
+                let playBoxes = document.querySelector(".playBoxes");
+                let boxes = document.querySelectorAll(".box");
+                boxes.forEach(box => box.hide());
+                instruction.hide();
+            
+                playBoxes.classList.add("playBoxDiv");
+            
+                let scoreText1 = document.querySelector(".scoreText1");
+                let scoreText2 = document.querySelector(".scoreText2");
+                tPlayed.textContent = `${totalPlay}`;
+                tRemaining.textContent = `${totalRemaining}`;
+            
+                
+                if (yourWinCount > compWinCount) {
+                    scoreText1.textContent = "Final Result... You Won!!!";
+                    scoreText2.textContent = `You won ${yourWinCount} times, Both draw ${tieCount} times, Comp won ${compWinCount}          times.`
+                } else if (yourWinCount < compWinCount) {
+                    scoreText1.textContent = "Final Result... You Lost!!!";
+                    scoreText2.textContent = `Comp won ${compWinCount} times, Both draw ${tieCount} times, You won ${yourWinCount}          times.`
+                } else {
+                    scoreText1.textContent = "Final Result... Its A Tie!!!";
+                    scoreText2.textContent = `Noooo Winner`
+                }
+            
+                let button = document.createElement("button");
+                button.textContent = "Reset";
+                playBoxes.appendChild(button);
+                button.addEventListener("click", reset);
+                
+            }
+            
+            function reset() {
+                yourWinCount = 0;
+                compWinCount = 0;
+                tieCount = 0;
+                totalPlay = 0;
+                totalRemaining = 5;
+            
+                let instruction = document.querySelector(".instruction");
+                let compScores = document.querySelectorAll(".compScore");
+                let yourScores = document.querySelectorAll(".yourScore")
+                let tieScore = document.querySelector(".bothDrawScore");
+                let tPlayed = document.querySelector(".tPlayed");
+                let tRemaining = document.querySelector(".tRemaining");
+                let scoreText1 = document.querySelector(".scoreText1");
+                let scoreText2 = document.querySelector(".scoreText2");
+                let boxes = document.querySelectorAll(".box");
+                
+            
+                compScores.forEach(compScore => compScore.textContent = `${compWinCount}`);
+                yourScores.forEach(yourScore => yourScore.textContent = `${yourWinCount}`);
+                tieScore.textContent = `${tieCount}`;
+                tPlayed.textContent = `${totalPlay}`;
+                tRemaining.textContent = `${totalRemaining}`;
+                scoreText1.textContent = "";
+                scoreText2.textContent = "Lets Play!";
+            
+                let playBoxes = document.querySelector(".playBoxes");
+                boxes.forEach(box => box.show());
+                playBoxes.classList.remove("playBoxDiv");
+                instruction.show();
+            
+                let button = document.querySelector("button");
+                playBoxes.removeChild(button);
+            }
+            
+            window.addEventListener("click", selectChoice);
+
+        </script>
+    </body>
+</html>
